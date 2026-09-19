@@ -1,0 +1,40 @@
+name: Build iOS App
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.0'
+
+      - name: Build iOS App (.app Bundle)
+        run: |
+          xcodebuild -project Hoogmatic.xcodeproj \
+                     -scheme Hoogmatic \
+                     -sdk iphonesimulator \
+                     -configuration Release \
+                     -derivedDataPath build \
+                     clean build
+
+      - name: Package App as Zip for Diawi / Appetize
+        run: |
+          mkdir -p Payload
+          cp -r build/Build/Products/Release-iphonesimulator/Hoogmatic.app Payload/
+          zip -r Hoogmatic-iOS-App.zip Payload/
+
+      - name: Upload Compiled iOS App Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Hoogmatic-iOS-App
+          path: Hoogmatic-iOS-App.zip
