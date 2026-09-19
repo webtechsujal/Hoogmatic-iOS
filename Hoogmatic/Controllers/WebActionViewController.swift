@@ -181,6 +181,7 @@ public class WebActionViewController: UIViewController, WKNavigationDelegate, WK
     }
     
     // MARK: - Document Chooser for File Uploads (<input type="file">)
+    @available(iOS 18.4, macOS 10.12, *)
     public func webView(_ webView: WKWebView, runOpenPanelWith parameters: WKOpenPanelParameters, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping ([URL]?) -> Void) {
         self.documentPickerCompletion = completionHandler
         
