@@ -27,7 +27,7 @@ jobs:
       - name: Package Hoogmatic.app at root
         run: |
           cd build/Build/Products/Release-iphonesimulator
-          zip -r ../../../Hoogmatic-App-Root.zip Hoogmatic.app
+          zip -r "$GITHUB_WORKSPACE/Hoogmatic-App-Root.zip" Hoogmatic.app
 
       - name: Upload iOS App Bundle Artifact
         uses: actions/upload-artifact@v4
