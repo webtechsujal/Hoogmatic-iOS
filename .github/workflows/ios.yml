@@ -13,25 +13,24 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Build iOS App for iPhone Device
+      - name: Build iOS App (.app Bundle)
         run: |
           xcodebuild -project Hoogmatic.xcodeproj \
                      -scheme Hoogmatic \
-                     -sdk iphoneos \
+                     -sdk iphonesimulator \
                      -configuration Release \
-                     -derivedDataPath build_device \
+                     -derivedDataPath build \
                      CODE_SIGNING_ALLOWED=NO \
                      CODE_SIGNING_REQUIRED=NO \
                      clean build
 
-      - name: Package App for Diawi
+      - name: Package Hoogmatic.app at root
         run: |
-          mkdir -p Payload
-          cp -r build_device/Build/Products/Release-iphoneos/Hoogmatic.app Payload/
-          zip -r Hoogmatic-Diawi.zip Payload/
+          cd build/Build/Products/Release-iphonesimulator
+          zip -r ../../../Hoogmatic-App-Root.zip Hoogmatic.app
 
-      - name: Upload Diawi Artifact
+      - name: Upload iOS App Bundle Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Hoogmatic-Diawi
-          path: Hoogmatic-Diawi.zip
+          name: Hoogmatic-App-Root
+          path: Hoogmatic-App-Root.zip
